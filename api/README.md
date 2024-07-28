@@ -10,7 +10,7 @@ Esta Aplicacion fue realizada en NestJs
 
 Primeros pasos
 ```sh
-npm install
+npm install --force
 ```
 
 Comandos para ejecutar:
