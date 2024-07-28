@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { Category } from 'src/entities/category.entity';
@@ -10,33 +21,35 @@ export class CategoryController {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-
   @Get()
   async getCategories(
     @Query() params: any,
   ): Promise<{ categories: Category[]; total: number }> {
     try {
-    
-
+      // Extraer y convertir parámetros de consulta
       const page = parseInt(params.page, 10) || 1;
-      const limit = parseInt(params.limit, 10) || 5;
+      const limit = params.limit
+        ? parseInt(params.limit, 10)
+        : Number.MAX_SAFE_INTEGER; // Devolver todos los registros si no se proporciona limit
       const skip = (page - 1) * limit;
 
       const [categories, total] = await this.categoryRepository.findAndCount({
-        
         order: {
           createdAt: 'DESC',
         },
-        skip,
-        take: limit,
-        where: params.search ? {
-          name: Like(`%${params.search}%`),
-        } : {},
+        skip: limit === Number.MAX_SAFE_INTEGER ? undefined : skip, // No aplicar skip si limit es muy alto
+        take: limit === Number.MAX_SAFE_INTEGER ? undefined : limit, // No aplicar limit si limit es muy alto
+        where: params.search
+          ? {
+              name: Like(`%${params.search}%`),
+            }
+          : {},
       });
-      
+
       return { categories, total };
     } catch (e) {
-      return e;
+      // Manejar errores de forma apropiada
+      throw new Error(`Error al obtener las categorías: ${e.message}`);
     }
   }
 
@@ -45,8 +58,9 @@ export class CategoryController {
     try {
       return await this.categoryRepository.save(category);
     } catch (e) {
-      throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'There was a problem creating the category',
           message: e.message,
         },
@@ -54,7 +68,6 @@ export class CategoryController {
       );
     }
   }
-
 
   @Put(':id')
   async updateCategory(
@@ -71,16 +84,16 @@ export class CategoryController {
       }
       return updateCategory;
     } catch (e) {
-      throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        error: 'There was a problem updating the category',
-        message: e.message,
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'There was a problem updating the category',
+          message: e.message,
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-
 
   @Delete(':id')
   async deleteCategory(@Param('id') id: number): Promise<{ message: string }> {
@@ -97,11 +110,14 @@ export class CategoryController {
 
       return { message: `Category with ID ${id} deleted successfully` };
     } catch (e) {
-      throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        error: 'There was a problem deleting the category',
-        message: e.message,
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'There was a problem deleting the category',
+          message: e.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

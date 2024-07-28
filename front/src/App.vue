@@ -89,10 +89,7 @@ const getTask = async () => {
 }
 
 const getCategories = async () => {
-  const response = await apiRequest('get', '/categories', null, {
-    page: currentPageCategories.value,
-    limit: itemsPerPageCategories.value
-  })
+  const response = await apiRequest('get', '/categories', null)
   categories.value = response.categories
   totalCategories.value = response.total
   if (response.categories.length > 0) {
