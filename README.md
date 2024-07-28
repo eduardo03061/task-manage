@@ -45,4 +45,15 @@ npm run dev
 /statuses -> [GET]
 /priorities -> [GET]
 ```
-- Uso: Ejemplos de cómo interactuar con la aplicación desde el frontend.
+### Uso: 
+#### Listado de tareas.
+
+![Captura de pantalla 2024-07-28 a la(s) 2 36 19 p m](https://github.com/user-attachments/assets/869ae04e-46b0-49f1-ab29-ed86c9d3c9ab)
+
+#### Crear tarea
+![Captura de pantalla 2024-07-28 a la(s) 2 43 59 p m](https://github.com/user-attachments/assets/df7e5dc1-5653-4357-8892-69b9f17c3353)
+
+
+#### Listado de categorias
+![Captura de pantalla 2024-07-28 a la(s) 2 38 26 p m](https://github.com/user-attachments/assets/3c52e613-68d5-4433-9258-d5d85e861d4b)
+
