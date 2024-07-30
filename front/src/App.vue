@@ -33,7 +33,7 @@ const page = ref('task')
 
 onMounted(async () => {
   await getTask()
-  await getCategories()
+  await getCategories(true)
 })
 
 watch([currentPage, itemsPerPage], async () => {
@@ -71,6 +71,7 @@ function handleClosePanel() {
 }
 const setPage = (newPage) => {
   page.value = newPage
+  getCategories()
 }
 
 const getTask = async () => {
@@ -88,8 +89,17 @@ const getTask = async () => {
   }
 }
 
-const getCategories = async () => {
-  const response = await apiRequest('get', '/categories', null)
+const getCategories = async (all) => {
+  let response = {};
+  if(all){
+    response = await apiRequest('get', '/categories')
+  }else{
+    response = await apiRequest('get', '/categories', null, {
+    page: currentPageCategories.value,
+    limit: itemsPerPageCategories.value
+  })
+  }
+  
   categories.value = response.categories
   totalCategories.value = response.total
   if (response.categories.length > 0) {
