@@ -25,10 +25,10 @@ PORT=3000
 DB_USER='user'
 DB_PASSWORD='password'
 DB_HOST='localhost'
-DB_NAME='nwoork'
+DB_NAME='task'
 DB_PORT=5432
 ```
 
 #### Nombre: Eduardo Alejandro Hernandez Garcia
-#### Contacto: +52 312 271 4600
+#### Contacto: +52 312 153 0546
 #### Email: eduardoalejandrohg@gmail.com
